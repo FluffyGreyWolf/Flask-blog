@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
+from datetime import datetime
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, email_validator, ValidationError
 from flaskblog.models import User
 
@@ -16,20 +17,18 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Sign Up')
 
     def validate_username(self, username):
-        if username.data != current_user.username:
 
-            user = User.query.filter_by(username=username.data).first()
+        user = User.query.filter_by(username=username.data).first()
 
-            if user:
-                raise ValidationError('That username is already taken!')
+        if user:
+            raise ValidationError('That username is already taken!')
 
     def validate_email(self, email):
-        if email.data != current_user.email:
 
-            user = User.query.filter_by(email=email.data).first()
+        user = User.query.filter_by(email=email.data).first()
 
-            if user:
-                raise ValidationError('That email is already taken!')
+        if user:
+            raise ValidationError('That email is already taken!')
 
 
 class LoginForm(FlaskForm):
@@ -51,7 +50,7 @@ class UpdateAccountForm(FlaskForm):
         user = User.query.filter_by(username=username.data).first()
 
         if user:
-            raise ValidationError('That username is already taken!')
+            raise ValidationError(f'That username is already taken!{username.data + user.username}')
 
     def validate_email(self, email):
         
@@ -59,3 +58,9 @@ class UpdateAccountForm(FlaskForm):
 
         if user:
             raise ValidationError('That email is already taken!')
+
+class PostForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    content = TextAreaField('Content', validators=[DataRequired()])
+    date_posted = datetime.now()
+    submit = SubmitField('Post')
