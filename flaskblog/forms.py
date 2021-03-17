@@ -72,10 +72,10 @@ class RequestResetForm(FlaskForm):
 
     def validate_email(self, email):
 
-    user = User.query.filter_by(email=email.data).first()
+        user = User.query.filter_by(email=email.data).first()
 
-    if user is None:
-        raise ValidationError("Account with that email doesn't exits!")
+        if user is None:
+            raise ValidationError("Account with that email doesn't exits!")
 
 
 class ResetPasswordForm(FlaskForm):
