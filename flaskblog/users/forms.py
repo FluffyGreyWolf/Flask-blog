@@ -1,9 +1,8 @@
 from flask_wtf import FlaskForm
-from datetime import datetime
 from flask_wtf.file import FileField, FileAllowed
+from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, email_validator, ValidationError
 from flaskblog.models import User
 
 
@@ -58,13 +57,6 @@ class UpdateAccountForm(FlaskForm):
 
         if user:
             raise ValidationError('That email is already taken!')
-
-class PostForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    content = TextAreaField('Content', validators=[DataRequired()])
-    date_posted = datetime.now()
-    submit = SubmitField('Post')
-
 
 class RequestResetForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
